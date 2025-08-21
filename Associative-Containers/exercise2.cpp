@@ -4,7 +4,7 @@
 #include<cmath>
 #include<functional>
 #include<cassert>
-
+#include<iomanip>
 enum class ErrorCode{
     
     Ok,
@@ -27,10 +27,20 @@ ErrorCode process(std::string input, double* out){
         // {"!",[](int a, int b){return ;}},
         {'^',[](double a, double b){return std::pow(a,b);}}
     };
-
-    // std::cout << core[op](x,y)<<'\n';
+    std::stringstream streaminput (input);
+    double x;
+    streaminput>>x;
+    // std::cout << x << std::endl;
+    char op;
+    streaminput>>op;
+    // std::cout << op << std::endl;
+    double y;
+    streaminput>>y;
+    // std::cout << y << std::endl;
+    *out = core[op](x,y);
     // *out =10.0; //sztuczna
     return ErrorCode::Ok;
+
 }
 void run_tests(){
     std::cout<<"Run tests\n";
@@ -39,11 +49,12 @@ void run_tests(){
         // given
         double out;
         ErrorCode error_code;
-        std::string input{"5 + 5"};
+        std::string input{"5+5"};
         // when
         error_code = process(input, &out);
         // then
         assert(error_code == ErrorCode::Ok);
+        std::cout<<'\n'<<std::setprecision(15)<<out<<std::endl;
         assert(std::fabs(out -10.0 )<0.001);
     }
     
@@ -52,32 +63,46 @@ void run_tests(){
     //     // given
     //     double out;
     //     ErrorCode error_code;
-    //     std::string input{"5 ^ 2"};
+    //     std::string input{"5^2"};
     //     // when
-    //     error_code = procces(input, &out);
+    //     error_code = process(input, &out);
     //     // then
     //     assert(error_code == ErrorCode::Ok);
     //     assert(std::fabs(out -25.0 )<0.001);
     // }
+
+
+    // //Test #3 
+    // {   
+    //     // given
+    //     double out;
+    //     ErrorCode error_code;
+    //     std::string input{"+54"};
+    //     // when
+    //     error_code = process(input, &out);
+    //     // then
+    //     assert(error_code == ErrorCode::Ok);
+        
+    // }
     std::cout<< "Tests passed\n";
 }
 
-void run_application(){
-    double x,y;
-    char op;
+// void run_application(){
+//     double x,y;
+//     char op;
 
-        while(true){
-        std::cout <<"Please insert numbers:";
+//         while(true){
+//         std::cout <<"Please insert numbers:";
     
-        // std::cout <<"\n";
+//         // std::cout <<"\n";
     
-        std::cin>> x>> op>> y;
+//         std::cin>> x>> op>> y;
     
-        // IsBadCharacter(op);
+//         // IsBadCharacter(op);
     
        
-        }
-}
+//         }
+// }
 
 int main(){
     run_tests();
