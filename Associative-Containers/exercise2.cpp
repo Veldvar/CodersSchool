@@ -16,7 +16,15 @@ enum class ErrorCode
     ModuleOfNonIntegerValue,
     None
 };
-
+bool DivideBy0 (const std::string &input_)
+{
+    for(size_t i = 0;i<input_.size();i++)
+        {
+            // std::cout<<input_[i];
+            if (input_[i] == '/' && input_[i+1] == '0'){return false;}
+        }   
+        return true;
+}
 ErrorCode process(std::string input, double *out)
 {
 
@@ -93,6 +101,20 @@ void run_tests()
         assert(input[0] != '+' && '/' && '*' && '%');
         assert(input.back() !='+' &&'-' && '/' && '*' && '%');
     }
+    // Test #4
+    {
+        // given
+        double out;
+        ErrorCode error_code;
+        std::string input {"6/0"};
+        // when
+        error_code=process(input,&out);
+        DivideBy0;
+        // then
+        assert(error_code == ErrorCode::Ok);
+        assert(DivideBy0(input));
+    }
+
     std::cout << "Tests passed\n";
 }
 
