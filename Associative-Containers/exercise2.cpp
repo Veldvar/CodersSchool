@@ -109,10 +109,8 @@ void run_tests()
         std::string input {"6/0"};
         // when
         error_code=process(input,&out);
-        DivideBy0;
         // then
-        assert(error_code == ErrorCode::Ok);
-        assert(DivideBy0(input));
+        assert(error_code == ErrorCode::DivideBy0);
     }
 
     std::cout << "Tests passed\n";
