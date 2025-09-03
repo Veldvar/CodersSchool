@@ -65,7 +65,7 @@ void run_tests()
         // given
         double out;
         ErrorCode error_code;
-        std::string input{"5+5"};
+        std::string input{"5 + 5"};
         // when
         error_code = process(input, &out);
         // then
@@ -79,7 +79,7 @@ void run_tests()
     //     // given
     //     double out;
     //     ErrorCode error_code;
-    //     std::string input{"5^2"};
+    //     std::string input{"5 ^ 2"};
     //     // when
     //     error_code = process(input, &out);
     //     // then
@@ -92,7 +92,7 @@ void run_tests()
         // given
         double out;
         ErrorCode error_code;
-        std::string input{"+54"};
+        std::string input{"+ 5 4"};
         // when
         error_code = process(input, &out);
         // then
@@ -106,7 +106,7 @@ void run_tests()
         // given
         double out;
         ErrorCode error_code;
-        std::string input {"6/0"};
+        std::string input {"6 / 0"};
         // when
         error_code=process(input,&out);
         // then
