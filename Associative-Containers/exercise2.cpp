@@ -7,7 +7,6 @@
 #include <iomanip>
 enum class ErrorCode
 {
-
     Ok,
     BadCharacter,
     BadFormat,
