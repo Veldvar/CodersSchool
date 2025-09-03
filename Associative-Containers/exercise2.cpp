@@ -96,10 +96,7 @@ void run_tests()
         // when
         error_code = process(input, &out);
         // then
-        assert(error_code == ErrorCode::Ok);
-        std::cout << input[0];
-        assert(input[0] != '+' && '/' && '*' && '%');
-        assert(input.back() !='+' &&'-' && '/' && '*' && '%');
+        assert(error_code == ErrorCode::BadFormat);
     }
     // Test #4
     {
