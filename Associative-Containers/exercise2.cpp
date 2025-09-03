@@ -16,7 +16,7 @@ enum class ErrorCode
     ModuleOfNonIntegerValue,
     None
 };
-bool DivideBy0 (const std::string &input_)
+bool DivideByZero (const std::string &input_)
 {
     for(size_t i = 0;i<input_.size();i++)
         {
