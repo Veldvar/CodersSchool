@@ -57,7 +57,7 @@ ErrorCode process(std::string input, double *out)
     // std::cout << op << std::endl;
     double y;
     streaminput >> y;
-    //check if integer is divided by zero
+    //check if input is divided by zero
     if (DivideByZero(input)) {return ErrorCode::DivideBy0;}
     //check if input has bad format
     if (BadFormat(input)) {return ErrorCode::BadFormat;}
