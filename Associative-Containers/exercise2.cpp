@@ -15,6 +15,13 @@ enum class ErrorCode
     ModuleOfNonIntegerValue,
     None
 };
+bool BadFormat (const std::string &input_)
+{
+    if (input_[0] == '+' && '/' && '*' && '%'){return true;}
+    return false;
+}
+
+
 bool DivideByZero (const std::string &input_)
 {
     for(size_t i = 0;i<input_.size();i++)
@@ -52,6 +59,8 @@ ErrorCode process(std::string input, double *out)
     streaminput >> y;
     //check if integer is divided by zero
     if (DivideByZero(input)) {return ErrorCode::DivideBy0;}
+    //check if input has bad format
+    if (BadFormat(input)) {return ErrorCode::BadFormat;}
     // std::cout << y << std::endl;
     *out = core[op](x, y);
     // *out =10.0; //sztuczna
@@ -88,17 +97,17 @@ void run_tests()
     //     assert(std::fabs(out -25.0 )<0.001);
     // }
 
-    // // Test #3
-    // {
-    //     // given
-    //     double out;
-    //     ErrorCode error_code;
-    //     std::string input{"+ 5 4"};
-    //     // when
-    //     error_code = process(input, &out);
-    //     // then
-    //     assert(error_code == ErrorCode::BadFormat);
-    // }
+    // Test #3
+    {
+        // given
+        double out;
+        ErrorCode error_code;
+        std::string input{"+ 5 4"};
+        // when
+        error_code = process(input, &out);
+        // then
+        assert(error_code == ErrorCode::BadFormat);
+    }
     // Test #4
     {
         // given
