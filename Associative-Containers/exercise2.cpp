@@ -1,41 +1,86 @@
-#include<map>
-#include<iostream>
-#include<numeric>
-#include<cmath>
-#include<functional>
-#include<cassert>
+#include <map>
+#include <iostream>
+#include <numeric>
+#include <cmath>
+#include <functional>
+#include <cassert>
+#include <iomanip>
 
-enum class ErrorCode{
-    
+enum class ErrorCode
+{
     Ok,
     BadCharacter,
     BadFormat,
     DivideBy0,
     SqrtOfNegativeNumber,
     ModuleOfNonIntegerValue,
-    None 
-    };
+    None
+};
 
-ErrorCode process(std::string input, double* out){ 
-    
-    std::map<char, std::function<double(double,double)>> core ={
-        {'+',[](double a, double b){return a+b;}},
-        {'-',[](double a, double b){return a-b;}},
-        {'/',[](double a, double b){return a/b;}},
-        {'*',[](double a, double b){return a*b;}},
-        {'%',[](double a, double b){return static_cast<int>(a) % static_cast<int>(b);}},
+bool BadFormat (const std::string &input_)
+{
+    if (input_[0] == '+' && '/' && '*' && '%'){return true;}
+    return false;
+}
+
+bool DivideByZero (const std::string &input_)
+{
+    for(size_t i = 0;i < input_.size();i++)
+        { 
+            
+            if (input_[i] == '/' && input_[i+2] == '0')
+            {
+                
+                return true;
+            
+            }
+        }   
+        return false;
+}
+
+ErrorCode process(std::string input, double *out)
+{
+
+    std::map<char, std::function<double(double, double)>> core = {
+        {'+', [](double a, double b)
+         { return a + b; }},
+        {'-', [](double a, double b)
+         { return a - b; }},
+        {'/', [](double a, double b)
+         { return a / b; }},
+        {'*', [](double a, double b)
+         { return a * b; }},
+        {'%', [](double a, double b)
+         { return static_cast<int>(a) % static_cast<int>(b); }},
         // {"!",[](int a, int b){return ;}},
-        {'^',[](double a, double b){return std::pow(a,b);}}
-    };
+        {'^', [](double a, double b)
+         { return std::pow(a, b); }},
+        {'r',[](double a, double b)
+        {return pow(a,1 / b);}}};
 
-    // std::cout << core[op](x,y)<<'\n';
-    // *out =10.0; //sztuczna
+    std::stringstream input_stream(input);
+    double x;
+    input_stream >> x;
+    char op;
+    input_stream >> op;
+    double y;
+    input_stream >> y;
+    //check if input is divided by zero
+    if (DivideByZero(input)) {return ErrorCode::DivideBy0;}
+    //check if input has bad format
+    if (BadFormat(input)) {return ErrorCode::BadFormat;}
+    //check if radicand is unsigned
+    if (op == 'r' && x<0){return ErrorCode::SqrtOfNegativeNumber;}
+    *out = core[op](x, y);
+
     return ErrorCode::Ok;
 }
-void run_tests(){
-    std::cout<<"Run tests\n";
-    //Test #1 
-    {   
+void run_tests()
+{
+    std::cout << "Run tests\n";
+
+    //Test #1
+    {
         // given
         double out;
         ErrorCode error_code;
@@ -46,40 +91,82 @@ void run_tests(){
         assert(error_code == ErrorCode::Ok);
         assert(std::fabs(out -10.0 )<0.001);
     }
+
+    //Test #2
+    {
+        // given
+        double out;
+        ErrorCode error_code;
+        std::string input{"5 ^ 2"};
+        // when
+        error_code = process(input, &out);
+        // then
+        assert(error_code == ErrorCode::Ok);
+        assert(std::fabs(out -25.0 )<0.001);
+    }
+
+    // Test #3
+    {
+        // given
+        double out;
+        ErrorCode error_code;
+        std::string input{"+ 5 4"};
+        // when
+        error_code = process(input, &out);
+        // then
+        assert(error_code == ErrorCode::BadFormat);
+    }
+
+    // Test #4
+    {
+        // given
+        double out;
+        ErrorCode error_code;
+        std::string input {"6 / 0"};
+        // when
+        error_code = process(input,&out);
+        // then
+        assert(error_code == ErrorCode::DivideBy0);
+    }
     
-    // //Test #2 
-    // {   
-    //     // given
-    //     double out;
-    //     ErrorCode error_code;
-    //     std::string input{"5 ^ 2"};
-    //     // when
-    //     error_code = procces(input, &out);
-    //     // then
-    //     assert(error_code == ErrorCode::Ok);
-    //     assert(std::fabs(out -25.0 )<0.001);
-    // }
-    std::cout<< "Tests passed\n";
+    //Test #5 NOT READY YET!
+    {
+        //given
+        double out;
+        std::string input{"-5 r 5"};
+        ErrorCode error_code;
+        //when
+        error_code = process(input,&out);
+        //then
+        assert(error_code == ErrorCode::SqrtOfNegativeNumber);
+
+    }
+
+    std::cout << "Tests passed\n";
+
+    
 }
 
-void run_application(){
-    double x,y;
-    char op;
+    
 
-        while(true){
-        std::cout <<"Please insert numbers:";
-    
-        // std::cout <<"\n";
-    
-        std::cin>> x>> op>> y;
-    
-        // IsBadCharacter(op);
-    
-       
-        }
-}
+// void run_application(){
+//     double x,y;
+//     char op;
 
-int main(){
+//         while(true){
+//         std::cout <<"Please insert numbers:";
+
+//         // std::cout <<"\n";
+
+//         std::cin>> x>> op>> y;
+
+//         // IsBadCharacter(op);
+
+//         }
+// }
+
+int main()
+{
     run_tests();
     // run_application();
 }
