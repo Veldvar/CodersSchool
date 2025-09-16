@@ -142,6 +142,16 @@ void run_tests()
 
     }
 
+    //Test #6
+    {    //given
+        double out;
+        std::string input {"-5!"};
+        ErrorCode error_code;
+        //when
+        error_code = process(input,&out);
+        //then
+        assert(error_code == ErrorCode::ModuleOfNonIntegerValue);
+    }
     std::cout << "Tests passed\n";
 
     
