@@ -5,6 +5,7 @@
 #include <functional>
 #include <cassert>
 #include <iomanip>
+
 enum class ErrorCode
 {
     Ok,
@@ -15,22 +16,28 @@ enum class ErrorCode
     ModuleOfNonIntegerValue,
     None
 };
+
 bool BadFormat (const std::string &input_)
 {
     if (input_[0] == '+' && '/' && '*' && '%'){return true;}
     return false;
 }
 
-
 bool DivideByZero (const std::string &input_)
 {
-    for(size_t i = 0;i<input_.size();i++)
-        {
-            // std::cout<<input_[i];
-            if (input_[i] == '/' && input_[i+2] == '0'){return true;}
+    for(size_t i = 0;i < input_.size();i++)
+        { 
+            
+            if (input_[i] == '/' && input_[i+2] == '0')
+            {
+                
+                return true;
+            
+            }
         }   
         return false;
 }
+
 ErrorCode process(std::string input, double *out)
 {
 
@@ -48,22 +55,19 @@ ErrorCode process(std::string input, double *out)
         // {"!",[](int a, int b){return ;}},
         {'^', [](double a, double b)
          { return std::pow(a, b); }}};
-    std::stringstream streaminput(input);
+
+    std::stringstream input_stream(input);
     double x;
-    streaminput >> x;
-    // std::cout << x << std::endl;
+    input_stream >> x;
     char op;
-    streaminput >> op;
-    // std::cout << op << std::endl;
+    input_stream >> op;
     double y;
-    streaminput >> y;
+    input_stream >> y;
     //check if input is divided by zero
     if (DivideByZero(input)) {return ErrorCode::DivideBy0;}
     //check if input has bad format
     if (BadFormat(input)) {return ErrorCode::BadFormat;}
-    // std::cout << y << std::endl;
     *out = core[op](x, y);
-    // *out =10.0; //sztuczna
     return ErrorCode::Ok;
 }
 void run_tests()
@@ -80,22 +84,21 @@ void run_tests()
         error_code = process(input, &out);
         // then
         assert(error_code == ErrorCode::Ok);
-        std::cout<<'\n'<<std::setprecision(15)<<out<<std::endl;
         assert(std::fabs(out -10.0 )<0.001);
     }
 
-    // //Test #2
-    // {
-    //     // given
-    //     double out;
-    //     ErrorCode error_code;
-    //     std::string input{"5 ^ 2"};
-    //     // when
-    //     error_code = process(input, &out);
-    //     // then
-    //     assert(error_code == ErrorCode::Ok);
-    //     assert(std::fabs(out -25.0 )<0.001);
-    // }
+    //Test #2
+    {
+        // given
+        double out;
+        ErrorCode error_code;
+        std::string input{"5 ^ 2"};
+        // when
+        error_code = process(input, &out);
+        // then
+        assert(error_code == ErrorCode::Ok);
+        assert(std::fabs(out -25.0 )<0.001);
+    }
 
     // Test #3
     {
@@ -108,6 +111,7 @@ void run_tests()
         // then
         assert(error_code == ErrorCode::BadFormat);
     }
+
     // Test #4
     {
         // given
@@ -115,7 +119,7 @@ void run_tests()
         ErrorCode error_code;
         std::string input {"6 / 0"};
         // when
-        error_code=process(input,&out);
+        error_code = process(input,&out);
         // then
         assert(error_code == ErrorCode::DivideBy0);
     }
