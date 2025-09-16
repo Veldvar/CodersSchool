@@ -42,21 +42,23 @@ ErrorCode process(std::string input, double *out)
 {
 
     std::map<char, std::function<double(double, double)>> core = {
-        {'+', [](double a, double b)
-         { return a + b; }},
-        {'-', [](double a, double b)
-         { return a - b; }},
-        {'/', [](double a, double b)
-         { return a / b; }},
-        {'*', [](double a, double b)
-         { return a * b; }},
-        {'%', [](double a, double b)
-         { return static_cast<int>(a) % static_cast<int>(b); }},
-        // {"!",[](int a, int b){return ;}},
-        {'^', [](double a, double b)
-         { return std::pow(a, b); }},
-        {'r',[](double a, double b)
-        {return pow(a,1 / b);}}};
+        {'+', [](double a, double b){ return a + b; }},
+        {'-', [](double a, double b){ return a - b; }},
+        {'/', [](double a, double b){ return a / b; }},
+        {'*', [](double a, double b){ return a * b; }},
+        {'%', [](double a, double b){ return static_cast<int>(a) % static_cast<int>(b); }},
+        {'^', [](double a, double b){ return std::pow(a, b); }},
+        {'$', [](double a, double b){return pow(a,1 / b);}},
+        {'!', [](double a, double b)
+            {   
+                double factorial;
+                for(int i = 2;i<static_cast<int>(a);++i){
+                    factorial*=i;
+                }
+                return factorial;
+            }
+        }
+    };
 
     std::stringstream input_stream(input);
     double x;
@@ -70,7 +72,10 @@ ErrorCode process(std::string input, double *out)
     //check if input has bad format
     if (BadFormat(input)) {return ErrorCode::BadFormat;}
     //check if radicand is unsigned
-    if (op == 'r' && x<0){return ErrorCode::SqrtOfNegativeNumber;}
+    if (op == '$' && x<0){return ErrorCode::SqrtOfNegativeNumber;}
+    //check if factorial is unsigned
+    if (op == '!' && x<0){return ErrorCode::ModuleOfNonIntegerValue;}
+    
     *out = core[op](x, y);
 
     return ErrorCode::Ok;
@@ -133,7 +138,7 @@ void run_tests()
     {
         //given
         double out;
-        std::string input{"-5 r 5"};
+        std::string input{"-5 $ 5"};
         ErrorCode error_code;
         //when
         error_code = process(input,&out);
