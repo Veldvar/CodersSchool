@@ -129,7 +129,7 @@ void run_tests()
         assert(error_code == ErrorCode::DivideBy0);
     }
     
-    //Test #5 NOT READY YET!
+    //Test #5
     {
         //given
         double out;
