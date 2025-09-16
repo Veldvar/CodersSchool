@@ -69,7 +69,10 @@ ErrorCode process(std::string input, double *out)
     if (DivideByZero(input)) {return ErrorCode::DivideBy0;}
     //check if input has bad format
     if (BadFormat(input)) {return ErrorCode::BadFormat;}
+    //check if radicand is unsigned
+    if (op == 'r' && x<0){return ErrorCode::SqrtOfNegativeNumber;}
     *out = core[op](x, y);
+
     return ErrorCode::Ok;
 }
 void run_tests()
@@ -125,9 +128,26 @@ void run_tests()
         // then
         assert(error_code == ErrorCode::DivideBy0);
     }
+    
+    //Test #5 NOT READY YET!
+    {
+        //given
+        double out;
+        std::string input{"-5 r 5"};
+        ErrorCode error_code;
+        //when
+        error_code = process(input,&out);
+        //then
+        assert(error_code == ErrorCode::SqrtOfNegativeNumber);
+
+    }
 
     std::cout << "Tests passed\n";
+
+    
 }
+
+    
 
 // void run_application(){
 //     double x,y;
