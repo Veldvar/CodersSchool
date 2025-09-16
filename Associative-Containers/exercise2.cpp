@@ -13,7 +13,7 @@ enum class ErrorCode
     BadFormat,
     DivideBy0,
     SqrtOfNegativeNumber,
-    ModuleOfNonIntegerValue,
+    FactorialFromUnsigned,
     None
 };
 
@@ -74,7 +74,7 @@ ErrorCode process(std::string input, double *out)
     //check if radicand is unsigned
     if (op == '$' && x<0){return ErrorCode::SqrtOfNegativeNumber;}
     //check if factorial is unsigned
-    if (op == '!' && x<0){return ErrorCode::ModuleOfNonIntegerValue;}
+    if (op == '!' && x<0){return ErrorCode::FactorialFromUnsigned;}
     
     *out = core[op](x, y);
 
@@ -155,7 +155,7 @@ void run_tests()
         //when
         error_code = process(input,&out);
         //then
-        assert(error_code == ErrorCode::ModuleOfNonIntegerValue);
+        assert(error_code == ErrorCode::FactorialFromUnsigned);
     }
     std::cout << "Tests passed\n";
 
