@@ -54,7 +54,9 @@ ErrorCode process(std::string input, double *out)
          { return static_cast<int>(a) % static_cast<int>(b); }},
         // {"!",[](int a, int b){return ;}},
         {'^', [](double a, double b)
-         { return std::pow(a, b); }}};
+         { return std::pow(a, b); }},
+        {'r',[](double a, double b)
+        {return pow(a,1 / b);}}};
 
     std::stringstream input_stream(input);
     double x;
