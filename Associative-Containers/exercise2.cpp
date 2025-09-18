@@ -17,11 +17,7 @@ enum class ErrorCode
     None
 };
 
-bool BadFormat (const std::string &input_)
-{
-    if (input_[0] == '+' && '/' && '*' && '%'){return true;}
-    return false;
-}
+
 
 bool DivideByZero (const std::string &input_)
 {
@@ -59,15 +55,14 @@ ErrorCode process(std::string input, double *out)
 
     std::stringstream input_stream(input);
     double x;
-    input_stream >> x;
+    if(!(input_stream>>x)){return ErrorCode::BadFormat;}
     char op;
-    input_stream >> op;
+    if(!(input_stream>>op)){return ErrorCode::BadFormat;}
     double y;
-    input_stream >> y;
+    if(!(input_stream>>y)){return ErrorCode::BadFormat;}
+
     //check if input is divided by zero
     if (DivideByZero(input)) {return ErrorCode::DivideBy0;}
-    //check if input has bad format
-    if (BadFormat(input)) {return ErrorCode::BadFormat;}
     //check if radicand is unsigned
     if (op == '$' && x<0){return ErrorCode::SqrtOfNegativeNumber;}
     //check if factorial is unsigned
