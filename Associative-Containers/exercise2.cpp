@@ -153,12 +153,12 @@ void run_tests()
     {
         // given
         double out;
-        std::string input {"-5!"};
         ErrorCode error_code;
-        //when
-        error_code = process(input,&out);
-        //then
-        assert(error_code == ErrorCode::FactorialFromUnsigned);
+        std::string input{"/ 5 4"};
+        // when
+        error_code = process(input, &out);
+        // then
+        assert(error_code == ErrorCode::BadFormat);
     }
     std::cout << "Tests passed\n";
 
