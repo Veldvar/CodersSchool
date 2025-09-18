@@ -25,17 +25,14 @@ bool BadFormat (const std::string &input_)
 
 bool DivideByZero (const std::string &input_)
 {
-    for(size_t i = 0;i < input_.size();i++)
-        { 
-            
-            if (input_[i] == '/' && input_[i+2] == '0')
-            {
-                
-                return true;
-            
-            }
-        }   
-        return false;
+   std::stringstream input_stream(input_);
+   double x,y;
+   char op;
+   if(!(input_stream>>x)){return false;}
+   if(!(input_stream>>op)){return false;}
+   if(!(input_stream>>y)){return false;}
+
+   return (op ==  '/' && y ==0.0);
 }
 
 ErrorCode process(std::string input, double *out)
